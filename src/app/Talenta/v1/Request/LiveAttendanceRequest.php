@@ -89,10 +89,11 @@ class LiveAttendanceRequest extends AbstractRequest
             return $this->executorCaller();
         }
 
-        return ['status' => [
-            'code' => '403',
-            'message' => $this->isOffDay() ? __('CLOCK_IN_FAILED_DUE_OFF_DAY') : __('CLOCK_IN_TIME_DOES_NOT_MATCH')
-        ]];
+        $this->responseData['status']['code'] = '403';
+        $this->responseData['status']['message'] = $this->isOffDay() ?
+            __('CLOCK_IN_FAILED_DUE_OFF_DAY') : __('CLOCK_IN_TIME_DOES_NOT_MATCH');
+
+        return $this->responseData;
     }
 
     /**
@@ -117,10 +118,11 @@ class LiveAttendanceRequest extends AbstractRequest
             return $this->executorCaller();
         }
 
-        return ['status' => [
-            'code' => '403',
-            'message' => $this->isOffDay() ? __('CLOCK_OUT_FAILED_DUE_OFF_DAY') : __('CLOCK_OUT_TIME_DOES_NOT_MATCH')
-        ]];
+        $this->responseData['status']['code'] = '403';
+        $this->responseData['status']['message'] = $this->isOffDay() ?
+            __('CLOCK_OUT_FAILED_DUE_OFF_DAY') : __('CLOCK_OUT_TIME_DOES_NOT_MATCH');
+
+        return $this->responseData;
     }
 
     /**
@@ -133,7 +135,18 @@ class LiveAttendanceRequest extends AbstractRequest
 
         $this->data['organisation_user_id'] = (string)$userId;
 
-        $uri = '/internal/talenta-attendance-web/v1/organisations/2799/attendance_clocks';
+        if ($this->getCompanyId() === null) {
+            $this->responseData['status']['code'] = '404';
+            $this->responseData['status']['message'] = __('COMPANY_ID_NOT_FOUND');
+
+            return $this->responseData;
+        }
+
+        $uri = sprintf(
+            '/internal/talenta-attendance-web/v1/organisations/%s/attendance_clocks',
+            $this->getCompanyId()
+        );
+
         $option = [
             'json' => $this->data,
             'headers' => [

@@ -79,6 +79,7 @@ class TalentaAuto extends Command
         }
 
         $liveAttendance = new LiveAttendanceRequest();
+        $liveAttendance->setCompanyId($auth->getCompanyId());
         $liveAttendance->setIsClockedIn($isClockedIn);
         $liveAttendance->setIsClockedOut($isClockedOut);
 

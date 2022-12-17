@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\TransferStats;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Yaml;
 
 class AuthRequest extends AbstractRequest
 {
@@ -73,13 +74,18 @@ class AuthRequest extends AbstractRequest
             @$dom->loadHtml($body);
 
         } catch (Exception|GuzzleException $exception) {
-            return [
-                'status' => [
-                    'code' => '999',
-                    'message' => $exception->getMessage()
-                ]
-            ];
+            $this->responseData['status']['code'] = '999';
+            $this->responseData['status']['message'] = $exception->getMessage();
+
+            return $this->responseData;
         }
+
+        /** @var DOMElement $companyId */
+        $companyId = $dom->getElementsByTagName('modal-session-expired')?->item(0);
+        $companyId = $companyId?->getAttribute(':company') ?? '';
+
+        $parseJson = Yaml::parse(str_replace("'", "", $companyId)) ?? null;
+        $this->setCompanyId($parseJson['id'] ?? null);
 
         $formNewUser = $dom->getElementById('new_user') ?? null;
         $inputHiddenTags = $formNewUser?->getElementsByTagName('input') ?? [];
@@ -109,7 +115,7 @@ class AuthRequest extends AbstractRequest
      */
     public function liveAttendanceHistory(Carbon $date = null) : array
     {
-        $date = $date === null ? Carbon::now()->format(parent::$dateFormat) : $date->format(parent::$dateFormat);
+        $date = $date === null ? $this->currentDate->format(parent::$dateFormat) : $date->format(parent::$dateFormat);
 
         $uri = '/api/web/live-attendance/history';
         $option = [

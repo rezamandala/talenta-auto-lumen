@@ -25,11 +25,13 @@ abstract class AbstractRequest extends Client
     /** @var string|null $accessToken */
     protected ?string $accessToken = null;
 
+    protected ?string $companyId = null;
+
     /** @var Carbon|null $currentDate */
     public ?Carbon $currentDate = null;
 
-    /** @var array $noData */
-    private array $noData = ['status' => ['code' => '204', 'message' => 'NO_DATA'], 'data' => null];
+    /** @var array $responseData */
+    protected array $responseData = ['status' => ['code' => '204', 'message' => 'NO_DATA'], 'data' => null];
 
     /** @var int $retryCounter */
     private int $retryCounter = 0;
@@ -82,30 +84,43 @@ abstract class AbstractRequest extends Client
             $bodyContent = $execute->getBody()?->getContents() ?? '';
             $decode = json_decode($bodyContent, true);
 
-            $data = is_array($decode) ? $decode : $this->noData;
+            $data = is_array($decode) ? $decode : $this->responseData;
         } catch (Exception|GuzzleException|ServerException|ClientException $exception) {
-            $data = [
-                'status' => [
-                    'code' => '999',
-                    'message' => $exception->getMessage()
-                ],
-                'data' => null
-            ];
+            $this->responseData['status']['code'] = '999';
+            $this->responseData['status']['message'] = $exception->getMessage();
+
+            $data = $this->responseData;
 
             if ($exception instanceof ServerException || $exception instanceof ClientException) {
                 $statusCode = $exception->getResponse()->getStatusCode();
                 $bodyContent = $exception->getResponse()?->getBody()?->getContents() ?? [];
                 $decode = json_decode($bodyContent, true);
 
-                $data = is_array($decode) ? $decode : $this->noData;
+                $data = is_array($decode) ? $decode : $this->responseData;
 
                 if ($statusCode === Response::HTTP_UNAUTHORIZED) {
-                    $data['status']['code'] = (string)Response::HTTP_UNAUTHORIZED;
-                    $data['status']['message'] = $decode['error_description'] ?? __('UNAUTHORIZED');
+                    $this->responseData['status']['code'] = (string)Response::HTTP_UNAUTHORIZED;
+                    $this->responseData['status']['message'] = $decode['error_description'] ?? __('UNAUTHORIZED');
                 }
             }
         }
 
         return $data;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompanyId(): ?string
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @param string|null $companyId
+     */
+    public function setCompanyId(?string $companyId): void
+    {
+        $this->companyId = $companyId;
     }
 }
