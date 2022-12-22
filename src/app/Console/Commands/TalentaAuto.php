@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Talenta\v1\Request\AuthRequest;
 use App\Talenta\v1\Request\LiveAttendanceRequest;
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Console\Command;
 
 class TalentaAuto extends Command
@@ -36,6 +38,7 @@ class TalentaAuto extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle(): void
     {
@@ -65,6 +68,30 @@ class TalentaAuto extends Command
         $clockedOutData = [];
 
         foreach ($dataHistories as $dataHistory) {
+            if (!isset($dataHistory['event_type'])) {
+                try {
+                    $checkDate = Carbon::createFromFormat($auth::$checkDateFormat, $dataHistory['check_date'] ?? null);
+                } catch (InvalidFormatException $exception) {
+                    throw new \Exception($exception->getMessage());
+                }
+
+                // clock_in
+                if (
+                    $checkDate->timestamp >= $auth->clockInTimeStamp->timestamp &&
+                    $checkDate->timestamp <= $auth->clockOutTimeStamp->timestamp
+                ) {
+                    $dataHistory['event_type'] = LiveAttendanceRequest::$eventTypeClockIn;
+                }
+
+                // clock_out
+                if (
+                    $checkDate->timestamp >= $auth->clockInTimeStamp->timestamp &&
+                    $checkDate->timestamp >= $auth->clockOutTimeStamp->timestamp
+                ) {
+                    $dataHistory['event_type'] = LiveAttendanceRequest::$eventTypeClockOut;
+                }
+            }
+
             $eventType = $dataHistory['event_type'] ?? null;
 
             if ($eventType === LiveAttendanceRequest::$eventTypeClockIn) {

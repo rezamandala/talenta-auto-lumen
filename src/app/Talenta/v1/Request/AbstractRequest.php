@@ -19,6 +19,8 @@ abstract class AbstractRequest extends Client
     /** @var string $dateFormat */
     protected static string $dateFormat = 'Y-m-d';
 
+    public static string $checkDateFormat = 'Y-m-d H:i:s';
+
     /** @var FileCookieJar|null $fileCookieJar */
     protected ?FileCookieJar $fileCookieJar = null;
 
@@ -29,6 +31,12 @@ abstract class AbstractRequest extends Client
 
     /** @var Carbon|null $currentDate */
     public ?Carbon $currentDate = null;
+
+    /** @var Carbon|null $clockInTimeStamp */
+    public ?Carbon $clockInTimeStamp = null;
+
+    /** @var Carbon|null $clockOutTimeStamp */
+    public ?Carbon $clockOutTimeStamp = null;
 
     /** @var array $responseData */
     protected array $responseData = ['status' => ['code' => '204', 'message' => 'NO_DATA'], 'data' => null];
@@ -52,6 +60,22 @@ abstract class AbstractRequest extends Client
         $config = array_merge($defaultConfig, $config);
 
         $this->currentDate = Carbon::now();
+
+        $clockInTime = sprintf(
+            '%s %s',
+            $this->currentDate->format(self::$dateFormat),
+            env('TALENTA_CLOCK_IN_TIME', '09:00')
+        );
+        $this->clockInTimeStamp = Carbon::createFromFormat(
+            sprintf('%s H:i', self::$dateFormat), $clockInTime
+        );
+
+        $clockOutTime = sprintf(
+            '%s %s',
+            $this->currentDate->format(self::$dateFormat),
+            env('TALENTA_CLOCK_OUT_TIME', '18:00')
+        );
+        $this->clockOutTimeStamp = Carbon::createFromFormat(sprintf('%s H:i', self::$dateFormat), $clockOutTime);
 
         parent::__construct($config);
     }

@@ -72,17 +72,8 @@ class LiveAttendanceRequest extends AbstractRequest
     {
         $this->data['event_type'] = self::$eventTypeClockIn;
 
-        $clockInTime = sprintf(
-            '%s %s',
-            $this->currentDate->format(parent::$dateFormat),
-            env('TALENTA_CLOCK_IN_TIME', '09:00')
-        );
-        $clockInTimeStamp = Carbon::createFromFormat(
-            sprintf('%s H:i', parent::$dateFormat), $clockInTime
-        );
-
         if (
-            ((int)$this?->currentDate?->timestamp >= (int)$clockInTimeStamp?->timestamp) &&
+            ((int)$this?->currentDate?->timestamp >= (int)$this->clockInTimeStamp?->timestamp) &&
             !$this->isClockedIn() &&
             !$this->isOffDay()
         ) {
@@ -103,15 +94,8 @@ class LiveAttendanceRequest extends AbstractRequest
     {
         $this->data['event_type'] = self::$eventTypeClockOut;
 
-        $clockOutTime = sprintf(
-            '%s %s',
-            $this->currentDate->format(parent::$dateFormat),
-            env('TALENTA_CLOCK_OUT_TIME', '18:00')
-        );
-        $clockOutTimeStamp = Carbon::createFromFormat(sprintf('%s H:i', parent::$dateFormat), $clockOutTime);
-
         if (
-            ((int)$this?->currentDate?->timestamp >= (int)$clockOutTimeStamp?->timestamp) &&
+            ((int)$this?->currentDate?->timestamp >= (int)$this->clockOutTimeStamp?->timestamp) &&
             !$this->isClockedOut()  &&
             !$this->isOffDay()
         ) {
