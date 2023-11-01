@@ -18,9 +18,6 @@ jobs:
         run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
         env:
           TZ: Asia/Jakarta
-          TALENTA_USER_EMAIL: ${{ secrets.TALENTA_EMAIL }}
-          TALENTA_USER_PASSWORD: ${{ secrets.TALENTA_PASSWORD }}
-          TALENTA_LIVE_ATTENDANCE_LATITUDE: ${{ secrets.LATITUDE }}
-          TALENTA_LIVE_ATTENDANCE_LONGITUDE: ${{ secrets.LONGITUDE }}
+          DOT_ENV: ${{ secrets.DOT_ENV }}
       - name: Execute artisan
         run: php artisan talenta:auto
