@@ -50,7 +50,7 @@ class TalentaAuto extends Command
         $login = $auth->login($email, $password);
 
         if (!$login) {
-            $this->warn(__('LOGIN_FAILED'));
+            $this->warn(__('LOGIN_FAILED EMAIL: ' . $email));
 
             return;
         }
