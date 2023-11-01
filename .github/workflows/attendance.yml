@@ -13,7 +13,7 @@ jobs:
       - name: Copy .env file
         run: cp .env.example .env
       - name: Storage Permission
-        run: chmod -R 777 storage bootstrap/cache
+        run: chmod -R 777 storage bootstrap
       - name: Install dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
         env:
