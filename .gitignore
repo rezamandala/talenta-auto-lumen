@@ -1,6 +1,6 @@
 /vendor
 /.idea
-/storage/cookies/*
+# /storage/cookies/*
 Homestead.json
 Homestead.yaml
 .env
