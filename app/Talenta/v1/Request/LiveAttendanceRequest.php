@@ -61,7 +61,7 @@ class LiveAttendanceRequest extends AbstractRequest
         $this->data['longitude'] = env('TALENTA_LIVE_ATTENDANCE_LONGITUDE');
         $this->data['notes'] = '';
         $this->data['selfie_photo'] = null;
-        $this->data['source'] = env('TALENTA_LIVE_ATTENDANCE_SOURCE');
+        $this->data['source'] = env('TALENTA_LIVE_ATTENDANCE_SOURCE', 'mobileweb');
         $this->data['schedule_date'] = $this->currentDate->format(parent::$dateFormat);
     }
 

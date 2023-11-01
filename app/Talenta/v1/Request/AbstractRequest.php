@@ -53,7 +53,7 @@ abstract class AbstractRequest extends Client
     public function __construct(array $config = [])
     {
         $defaultConfig = [
-            'base_uri' => env('TALENTA_BASE_URL'),
+            'base_uri' => env('TALENTA_BASE_URL', 'https://hr.talenta.co'),
             'cookies' => $this->getFileCookieJar($this->fileCookieJarName),
         ];
 
@@ -64,7 +64,7 @@ abstract class AbstractRequest extends Client
         $clockInTime = sprintf(
             '%s %s',
             $this->currentDate->format(self::$dateFormat),
-            env('TALENTA_CLOCK_IN_TIME', '09:00')
+            env('TALENTA_CLOCK_IN_TIME', '08:30')
         );
         $this->clockInTimeStamp = Carbon::createFromFormat(
             sprintf('%s H:i', self::$dateFormat), $clockInTime
@@ -73,7 +73,7 @@ abstract class AbstractRequest extends Client
         $clockOutTime = sprintf(
             '%s %s',
             $this->currentDate->format(self::$dateFormat),
-            env('TALENTA_CLOCK_OUT_TIME', '18:00')
+            env('TALENTA_CLOCK_OUT_TIME', '17:30')
         );
         $this->clockOutTimeStamp = Carbon::createFromFormat(sprintf('%s H:i', self::$dateFormat), $clockOutTime);
 
