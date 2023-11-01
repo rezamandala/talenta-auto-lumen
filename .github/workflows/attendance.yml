@@ -1,0 +1,24 @@
+name: CI/CD workflow
+on:
+  workflow_dispatch: {}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - name: Copy .env file
+        run: cp .env.example .env
+      - name: Install dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+        env:
+          TZ: Asia/Jakarta
+          TALENTA_USER_EMAIL: ${{ secrets.TALENTA_EMAIL }}
+          TALENTA_USER_PASSWORD: ${{ secrets.TALENTA_PASSWORD }}
+          TALENTA_LIVE_ATTENDANCE_LATITUDE: ${{ secrets.LATITUDE }}
+          TALENTA_LIVE_ATTENDANCE_LONGITUDE: ${{ secrets.LONGITUDE }}
+      - name: Execute artisan
+        run: php artisan talenta:auto
