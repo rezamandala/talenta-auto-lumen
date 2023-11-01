@@ -1,4 +1,4 @@
-name: CI/CD workflow
+name: Attendance
 on:
   workflow_dispatch: {}
 jobs:
