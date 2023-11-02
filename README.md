@@ -1,73 +1,40 @@
 
-# Talenta Auto
+# Automate Talenta ClockIn - Clock Out
 
-Made with 💙 for Indonesian Employee who using Talenta by Mekari.
+## Documentation
+This documentation will provide a tutorial for using manual and automatic clock-in and clock-out "talenta" applications via web https://hr.talenta.co
 
-- Too lazy to clock-in or clock-out ?
-- Or often forget to clock-in or clock-out  ?
+### Preperation
 
-No worries ! Talenta Auto is here.
+- Fork this repo
+	- ![fork repo](./images/ss/1.png)
+	- ![fork repo](./images/ss/2.png)
+- create a repository secret in the settings - secrets and variables - action menu in your repository (example: **https://github.com/{your-github-username}/automation-attendance**)
+	- ![creating repository secret](./images/ss/3.png)
+	- ![creating repository secret 2 ](./images/ss/6.png)
+- then, create a secret like this
+	- ![creating repository secret 2](./images/ss/17.png)
+- get your langitude and longitude from gmaps
+	- ![pointing lat long from gmpas](./images/ss/5.png)
+- get your user_id by inspecting the element and get MOE_DATA from local storage
+	- ![pointing lat long from gmpas](./images/ss/18.png)
+- find USER_ATTRIBUTE_UNIQUE_ID from the value of MOE_DATA then get the first string before "_" symbol, ex: XXXXX_YYY (XXXXX is your user_id and YYYY is organization id )
+- go to action tab and accept the tnc
+	- ![accept tnc action](./images/ss/7.png)
+- Go to check workflow to check whether all the settings in the repository secret are correct
+	- ![check action](./images/ss/8.png)
+	- if your check is failed, then you must insert repository secret correctly
+	- ![success](./images/ss/10.png)
+	- next setting for clockin - clockout if your check is success
+	- ![success](./images/ss/9.png)
+- Enable Clock-in and Clock-out action
+	- ![success](./images/ss/11.png)
+- The clock-in schedule is set at around 7.30-08.30 and the clock-out is set at around 17.00 - 18.00. Sometimes the clock-in shows more time than specified due to the system queue, if possible I recommend manual clock-in
+	- you can run workflow manually or You can wait for the schedule to run
+	- ![success](./images/ss/12.png)
 
-## Requirement
-
-Make sure your machine is installed below requirement
-
-| Stack      | Version  |
-|:-----------|:---------|
-| `php`      | `8.*`    |
-| `composer` | `2.*`    |
-| `nano`     | `Latest` |
-
-## Installation
-
-Clone this repository.
-
-```bash
-$ git clone https://github.com/yuliusardian/talenta-auto.git && cd talenta-auto/src/
-```
-
-Composer install
-
-```bash
-$ composer install
-```
-
-## Setup
-
-Copy .env.example to .env
-
-```bash
-$ cp -rv .env.example .env
-```
-
-To run this project, you will need to add/edit the following environment variables to your .env file
-
-
-| Variable                            | Description                                                               |
-|:------------------------------------|:--------------------------------------------------------------------------|
-| `TALENTA_USER_EMAIL`                | Talenta email                                                             |
-| `TALENTA_USER_PASSWORD`             | Talenta password                                                          |
-| `TALENTA_LIVE_ATTENDANCE_LATITUDE`  | Talenta live attendance latitude                                          |
-| `TALENTA_LIVE_ATTENDANCE_LONGITUDE` | Talenta live attendance longitude                                         |
-| `TALENTA_LIVE_ATTENDANCE_SOURCE`    | Talenta live attendance source, possible value `mobileapp` or `mobileweb` |
-| `TALENTA_CLOCK_IN_TIME`             | Talenta clock-in time, format `hh:mm`                                     |
-| `TALENTA_CLOCK_OUT_TIME`            | Talenta clock-out time, format `hh:mm`                                    |
-| `TALENTA_OFF_DAY`                   | Talenta off day, separator `,` example `saturday,sunday`                  |
-
-After you add/edit the variable, final step is to set the command into `crontab` or `scheduler`
-
-```bash
-$ export VISUAL=nano; crontab -e
-```
-
-The config would be :
-
-```bash
-* * * * * cd /your-cloned-directory/talenta-auto/src && php artisan talenta:auto
-```
-
-That's it ! :)  If you love this project you can buy me a coffee.
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/yuliusardian)
-Or
-[saweria.co](https://saweria.co/yuliusardian)
+### Additional
+- You can change the schedule if your time scheme is different. setting schedules using crontab, make sure you understand the rules in crontab
+	- ![edit scheduler](./images/ss/13.png)
+    - ![edit scheduler](./images/ss/14.png)
+    - ![edit scheduler](./images/ss/15.png)
