@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\TalentaAuto::class
+        Commands\TalentaAuto::class,
+        Commands\TalentaClockIn::class,
+        Commands\TalentaClockOut::class
     ];
 
     /**

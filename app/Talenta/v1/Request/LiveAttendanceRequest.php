@@ -72,17 +72,13 @@ class LiveAttendanceRequest extends AbstractRequest
     {
         $this->data['event_type'] = self::$eventTypeClockIn;
 
-        if (
-            ((int)$this?->currentDate?->timestamp >= (int)$this->clockInTimeStamp?->timestamp) &&
-            !$this->isClockedIn() &&
-            !$this->isOffDay()
-        ) {
+        if (!$this->isOffDay()) {
             return $this->executorCaller();
         }
 
         $this->responseData['status']['code'] = '403';
         $this->responseData['status']['message'] = $this->isOffDay() ?
-            __('CLOCK_IN_FAILED_DUE_OFF_DAY') : __('CLOCK_IN_TIME_DOES_NOT_MATCH');
+            __('CLOCK_IN_FAILED_DUE_OFF_DAY') : __('CLOCK_IN_TIME_DOES_NOT_MATCH ' . (int)$this?->currentDate);
 
         return $this->responseData;
     }
@@ -95,10 +91,7 @@ class LiveAttendanceRequest extends AbstractRequest
         $this->data['event_type'] = self::$eventTypeClockOut;
 
         if (
-            ((int)$this?->currentDate?->timestamp >= (int)$this->clockOutTimeStamp?->timestamp) &&
-            !$this->isClockedOut()  &&
-            !$this->isOffDay()
-        ) {
+            !$this->isOffDay()) {
             return $this->executorCaller();
         }
 
@@ -115,7 +108,7 @@ class LiveAttendanceRequest extends AbstractRequest
     protected function executorCaller(): array
     {
         $token = $this->parseToken();
-        $userId = $this->parseUserId();
+        $userId = env('TALENTA_USER_ID');
 
         $this->data['organisation_user_id'] = (string)$userId;
 
