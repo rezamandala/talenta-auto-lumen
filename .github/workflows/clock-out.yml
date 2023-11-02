@@ -25,3 +25,4 @@ jobs:
           TALENTA_LIVE_ATTENDANCE_LATITUDE: ${{ secrets.LATITUDE }}
           TALENTA_LIVE_ATTENDANCE_LONGITUDE: ${{ secrets.LONGITUDE }}
           TALENTA_USER_ID: ${{ secrets.TALENTA_USER_ID }}
+          TALENTA_OFF_DAY: saturday,sunday
