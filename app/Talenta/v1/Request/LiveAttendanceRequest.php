@@ -198,13 +198,13 @@ class LiveAttendanceRequest extends AbstractRequest
     /**
      * @return int|null
      */
-    private function parseUserId(): ?int
-    {
-        $identity = $this->parser('_identity');
-        $userId = json_decode($identity[1] ?? '', true);
+    // private function parseUserId(): ?int
+    // {
+    //     $identity = $this->parser('_identity');
+    //     $userId = json_decode($identity[1] ?? '', true);
 
-        return $userId[0] ?? null;
-    }
+    //     return $userId[0] ?? null;
+    // }
 
     /**
      * @param string $cookieName
