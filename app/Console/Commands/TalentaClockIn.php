@@ -49,21 +49,20 @@ class TalentaClockIn extends Command
 
         $login = $auth->login($email, $password);
 
+
         if (!$login) {
-            $this->warn(__('LOGIN_FAILED EMAIL: ' . $email));
+            $this->warn(__('LOGIN_FAILED'));
 
             return;
         }
 
         $this->info(__('LOGIN_SUCCESS'));
 
-
         $liveAttendance = new LiveAttendanceRequest();
-        $liveAttendance->setCompanyId($auth->getCompanyId());
-
+        $liveAttendance->setSessionToken($auth->sessionToken);
+        $liveAttendance->setCompanyId(env('TALENTA_COMPANY_ID'));
         $this->info(__('CLOCK_IN'));
         $this->info(json_encode($liveAttendance->clockIn()));
-
 
     }
 }

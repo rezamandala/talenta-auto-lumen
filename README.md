@@ -13,12 +13,12 @@ This documentation will provide a tutorial for using manual and automatic clock-
 	- ![creating repository secret](./images/ss/3.png)
 	- ![creating repository secret 2 ](./images/ss/6.png)
 - then, create a secret like this
-	- ![creating repository secret 2](./images/ss/17.png)
+	- ![creating repository secret 2](./images/ss/19.png)
 - get your langitude and longitude from gmaps
 	- ![pointing lat long from gmpas](./images/ss/5.png)
-- get your user_id by inspecting the element and get MOE_DATA from local storage
+- get your user_id & company_id by inspecting the element and get MOE_DATA from local storage
 	- ![pointing lat long from gmpas](./images/ss/18.png)
-- find USER_ATTRIBUTE_UNIQUE_ID from the value of MOE_DATA then get the first string before "_" symbol, ex: XXXXX_YYY (XXXXX is your user_id and YYYY is organization id )
+- find USER_ATTRIBUTE_UNIQUE_ID from the value of MOE_DATA then get the first string before "_" symbol, ex: XXXXX_YYY (XXXXX is your user_id and YYYY is company id )
 - go to action tab and accept the tnc
 	- ![accept tnc action](./images/ss/7.png)
 - Enable Clock-in and Clock-out action
