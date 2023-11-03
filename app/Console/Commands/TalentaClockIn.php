@@ -57,14 +57,6 @@ class TalentaClockIn extends Command
 
         $this->info(__('LOGIN_SUCCESS'));
 
-        $history = $auth->liveAttendanceHistory();
-
-        $dataHistories = $history['data']['history'] ?? [];
-
-        $isClockedIn = false;
-        $clockedInData = [];
-
-
 
         $liveAttendance = new LiveAttendanceRequest();
         $liveAttendance->setCompanyId($auth->getCompanyId());
