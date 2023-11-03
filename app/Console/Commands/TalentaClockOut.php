@@ -60,7 +60,7 @@ class TalentaClockOut extends Command
 
         $liveAttendance = new LiveAttendanceRequest();
         $liveAttendance->setSessionToken($auth->sessionToken);
-        $liveAttendance->setCompanyId($auth->getCompanyId());
+        $liveAttendance->setCompanyId(env('TALENTA_COMPANY_ID'));
         $this->info(__('CLOCK_OUT'));
         $this->info(json_encode($liveAttendance->clockOut()));
 
