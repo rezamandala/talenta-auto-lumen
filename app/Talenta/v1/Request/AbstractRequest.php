@@ -109,6 +109,7 @@ abstract class AbstractRequest extends Client
             $decode = json_decode($bodyContent, true);
 
             $data = is_array($decode) ? $decode : $this->responseData;
+
         } catch (Exception|GuzzleException|ServerException|ClientException $exception) {
             $this->responseData['status']['code'] = '999';
             $this->responseData['status']['message'] = $exception->getMessage();

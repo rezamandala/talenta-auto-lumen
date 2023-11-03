@@ -20,6 +20,8 @@ class AuthRequest extends AbstractRequest
     /** @var string $redirectAfterLogin */
     private static string $redirectAfterLogin = 'employee/dashboard';
 
+    public $sessionToken='';
+
     /**
      * @param $email
      * @param $password
@@ -46,8 +48,17 @@ class AuthRequest extends AbstractRequest
         ];
 
         $this->executor(Request::METHOD_POST, $loginData['request_uri'], $option);
+        $cookieJar = $this->getConfig('cookies');
+
+        $this->setSessionToken($cookieJar->toArray());
 
         return str_contains($url, self::$redirectAfterLogin);
+    }
+
+
+    private function setSessionToken($data) {
+        $key = array_search('_session_token', array_column($data, 'Name'));
+        $this->sessionToken = $data[$key]['Value'];
     }
 
     /**

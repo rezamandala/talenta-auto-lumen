@@ -49,6 +49,7 @@ class TalentaClockOut extends Command
 
         $login = $auth->login($email, $password);
 
+
         if (!$login) {
             $this->warn(__('LOGIN_FAILED EMAIL: ' . $email));
 
@@ -57,13 +58,11 @@ class TalentaClockOut extends Command
 
         $this->info(__('LOGIN_SUCCESS'));
 
-
         $liveAttendance = new LiveAttendanceRequest();
+        $liveAttendance->setSessionToken($auth->sessionToken);
         $liveAttendance->setCompanyId($auth->getCompanyId());
-
         $this->info(__('CLOCK_OUT'));
         $this->info(json_encode($liveAttendance->clockOut()));
-
 
     }
 }

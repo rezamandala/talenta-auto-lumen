@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveAttendanceRequest extends AbstractRequest
 {
+    public $sessionToken;
     /** @var string|null $fileCookieJarName */
     protected ?string $fileCookieJarName = 'live_attendance.cookies';
 
@@ -190,8 +191,7 @@ class LiveAttendanceRequest extends AbstractRequest
      */
     private function parseToken(): ?string
     {
-        $sessionToken = $this->parser('_session_token');
-
+        $sessionToken = $this->parser($this->sessionToken);
         return $sessionToken[1] ?? null;
     }
 
@@ -210,18 +210,14 @@ class LiveAttendanceRequest extends AbstractRequest
      * @param string $cookieName
      * @return array
      */
-    private function parser(string $cookieName): array
+    private function parser($string): array
     {
-        $cookies = new FileCookieJar(
-            storage_path(sprintf('cookies/%s', 'auth.cookies')),
-            true
-        );
-
-        $cookieValue = $cookies->getCookieByName($cookieName)?->getValue() ?? null;
-        $decode = urldecode($cookieValue);
+        $decode = urldecode($string);
         $split = substr($decode, strpos($decode, "a:2:") - 0);
-        dd($cookieValue);
-
         return unserialize($split) ?? [];
+    }
+
+    function setSessionToken($sessionToken) {
+        $this->sessionToken = $sessionToken;
     }
 }
