@@ -220,7 +220,7 @@ class LiveAttendanceRequest extends AbstractRequest
         $cookieValue = $cookies->getCookieByName($cookieName)?->getValue() ?? null;
         $decode = urldecode($cookieValue);
         $split = substr($decode, strpos($decode, "a:2:") - 0);
-        $this->info($decode);
+        dd($decode);
 
         return unserialize($split) ?? [];
     }
